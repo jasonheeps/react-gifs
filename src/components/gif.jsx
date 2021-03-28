@@ -1,20 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Gif extends Component {
-  constructor(props) {
-    super(props);
+function Gif(props) {
+  const { id } = props;
 
-    this.state = {
+  const handleClick = () => {
+    props.setSelectedGifIdFunction(id);
+  };
 
-    };
-  }
-
-  render() {
-    const src = `https://media2.giphy.com/media/${this.props.id}/200.gif`;
-    return (
-      <img src={src} alt="" className="gif" />
-    );
-  }
+  const src = `https://media2.giphy.com/media/${id}/200.gif`;
+  return (
+    <img src={src} alt="" className="gif" key={id} onClick={handleClick} />
+  );
 }
 
 export default Gif;

@@ -1,33 +1,32 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
 import SearchBar from "./search_bar";
 import Gif from "./gif";
 import GifList from "./gif_list";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+const GIPHY_API_KEY = "pn4hVI8k4BmJWPVSJGw3BUjIUc6oJ8TN";
 
-    this.state = {
-    };
-  }
+export default function App() {
+  const [gifs, setGifs] = useState([]);
+  const [selectedGifId, setSelectedGifId] = useState("yFb5bKTItbB4dZ9xfd");
 
-  // Todo: fetch list of gis with giphy api
-  // const gifs = search();
+  const handleInput = (e) => {
+    const query = e.target.value;
+    const url = `https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_API_KEY}&q=${query}&limit=10`;
+    fetch(url).then(response => response.json()).then((data) => {
+      setGifs(data.data.map(gif => gif.id));
+    });
+  };
 
-  render() {
-    return (
-      <div>
-        <div className="left-scene">
-          <SearchBar />
-          <Gif id="yFb5bKTItbB4dZ9xfd"/>
-        </div>
-        <div className="right-scene">
-          <GifList gifs={gifs} />
-        </div>
+  return (
+    <div>
+      <div className="left-scene">
+        <SearchBar getGifsFunction={handleInput} />
+        <Gif id={selectedGifId} />
       </div>
-    );
-  }
+      <div className="right-scene">
+        <GifList gifs={gifs} setSelectedGifIdFunction={setSelectedGifId} />
+      </div>
+    </div>
+  );
 }
-
-export default App;
